@@ -1,0 +1,11 @@
+[project]
+name = "consent-layer"
+version = "1.0.0"
+description = "Narrow, revocable, auditable permissions for AI agents"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consent Layer for AI Agents</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <div>
+        <h1>Consent Layer</h1>
+        <p>Narrow, revocable, auditable permissions for AI agents</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span id="chain-pill" class="pill pill-ok" title="Integrity of the audit log">
+        <span class="dot"></span><span id="chain-pill-text">audit chain intact</span>
+      </span>
+      <button id="reset" class="btn btn-quiet" type="button">Reset demo</button>
+    </div>
+  </header>
+
+  <main class="flow">
+
+    <!-- ─────────────── the agent ─────────────── -->
+    <section class="col" aria-labelledby="agent-h">
+      <div class="col-head">
+        <span class="step">1</span>
+        <div>
+          <h2 id="agent-h">The Agent</h2>
+          <p>Asks for a narrow, specific permission.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <label class="field-label" for="scenario">What should it ask for?</label>
+        <select id="scenario"></select>
+        <p id="scenario-note" class="hint"></p>
+        <div id="scenario-preview" class="preview" aria-live="polite"></div>
+        <button id="request" class="btn btn-primary block" type="button">
+          Request permission
+        </button>
+      </div>
+
+      <div class="card" id="shop-card" hidden>
+        <h3>Then it goes shopping</h3>
+        <p class="hint">
+          The agent picks an item. The <em>merchant</em> fills in the price and its
+          own domain — an agent that could state its own amount could under-report it.
+        </p>
+        <ul id="catalog" class="catalog"></ul>
+      </div>
+    </section>
+
+    <!-- ─────────────── the human ─────────────── -->
+    <section class="col" aria-labelledby="human-h">
+      <div class="col-head">
+        <span class="step">2</span>
+        <div>
+          <h2 id="human-h">You</h2>
+          <p>Read it in plain language. Approve, deny, revoke.</p>
+        </div>
+      </div>
+
+      <div id="pending" class="stack"></div>
+      <div id="grants" class="stack"></div>
+      <p id="human-empty" class="empty">
+        Nothing waiting on you. Send a request from the left.
+      </p>
+    </section>
+
+    <!-- ─────────────── the merchant ─────────────── -->
+    <section class="col" aria-labelledby="merchant-h">
+      <div class="col-head">
+        <span class="step">3</span>
+        <div>
+          <h2 id="merchant-h">The Merchant</h2>
+          <p>Verifies the token independently. Fails closed.</p>
+        </div>
+      </div>
+
+      <div id="verdict" class="stack">
+        <p class="empty">No verification attempted yet.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ─────────────── audit ─────────────── -->
+  <section class="audit" aria-labelledby="audit-h">
+    <div class="audit-head">
+      <div>
+        <h2 id="audit-h">Audit trail</h2>
+        <p class="hint">
+          Every entry commits to the one before it, so altering history is
+          detectable. <code>row_hash = sha256(prev_hash + entry)</code>
+        </p>
+      </div>
+      <div class="audit-actions">
+        <button id="verify-chain" class="btn btn-quiet" type="button">Verify chain</button>
+        <button id="tamper" class="btn btn-danger-quiet" type="button">
+          Tamper with an entry
+        </button>
+      </div>
+    </div>
+    <div id="chain-banner" class="banner banner-ok" hidden></div>
+    <div class="table-scroll">
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th>#</th><th>When</th><th>Event</th><th>Actor</th>
+            <th>Detail</th><th>Hash</th>
+          </tr>
+        </thead>
+        <tbody id="audit-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
